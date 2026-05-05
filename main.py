@@ -5,7 +5,7 @@ from typing import Optional
 from fastapi import FastAPI, HTTPException, Query, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from data_pipeline import DRUGS_DB, search_drugs, get_drug_price, get_formulary, find_alternatives
+from data_pipeline import DRUGS_DB, search_drugs, get_drug_price, get_formulary, find_alternatives, PLANS_DB
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("drugpricer")
@@ -60,7 +60,6 @@ async def alternatives(ndc: str, plan_id: Optional[str] = Query(None)):
 
 @app.get("/v1/plans")
 async def list_plans():
-    from data_pipeline import PLANS_DB
     return {"plans": [{"id": k, "name": v["name"], "type": v["type"]} for k, v in PLANS_DB.items()]}
 
 if __name__ == "__main__":
